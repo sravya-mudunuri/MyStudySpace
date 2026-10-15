@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Mentor | Learning Progress</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Poppins","Segoe UI",sans-serif;
+}
+
+/* ===== BACKGROUND (SAME AS OTHER PAGES) ===== */
+body{
+    min-height:100vh;
+    padding:20px;
+    background:
+    linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)),
+    url("https://t4.ftcdn.net/jpg/04/97/86/15/360_F_497861573_EX9cjKXjVLBhbHrawjVK8M3BthLDS5lE.jpg");
+    background-size:cover;
+    background-position:center;
+}
+
+/* ===== MAIN CONTAINER ===== */
+.dashboard{
+    width:100%;
+    min-height:calc(100vh - 40px);
+    background:rgba(255,255,255,0.40);
+    backdrop-filter:blur(16px);
+    border-radius:28px;
+    box-shadow:0 35px 70px rgba(0,0,0,0.28);
+    padding:30px;
+    display:flex;
+    flex-direction:column;
+}
+
+/* ===== HEADER ===== */
+
+.header{
+    margin-bottom:30px;
+}
+
+.header h2{
+    font-size:24px;
+    color:#333;
+    font-weight:600;
+}
+
+/* ===== GRID ===== */
+
+.grid{
+    flex:1;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:26px;
+}
+
+/* ===== GLASS CARDS ===== */
+
+.card{
+    background:rgba(255,255,255,0.70);
+    backdrop-filter:blur(12px);
+    border-radius:24px;
+    padding:30px;
+    box-shadow:0 20px 40px rgba(0,0,0,0.18);
+    transition:all 0.3s ease;
+    display:flex;
+    flex-direction:column;
+}
+
+.card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 30px 55px rgba(0,0,0,0.25);
+}
+
+.card-icon{
+    font-size:28px;
+    margin-bottom:12px;
+}
+
+.card-title{
+    font-size:16px;
+    font-weight:600;
+    color:#333;
+    margin-bottom:8px;
+}
+
+.card-desc{
+    font-size:14px;
+    color:#555;
+    line-height:1.5;
+    margin-bottom:15px;
+}
+
+/* ===== FORM ELEMENTS ===== */
+
+.field{
+    margin-bottom:14px;
+}
+
+.field input,
+.field select{
+    width:100%;
+    padding:10px;
+    border:none;
+    border-bottom:2px solid #aaa;
+    background:transparent;
+    font-size:14px;
+}
+
+.field input:focus,
+.field select:focus{
+    outline:none;
+    border-color:#6c63ff;
+}
+
+/* ===== BUTTON ===== */
+
+button{
+    margin-top:8px;
+    padding:11px;
+    border:none;
+    border-radius:20px;
+    background:linear-gradient(135deg,#6c63ff,#b388ff);
+    color:white;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+}
+
+button:hover{
+    opacity:0.9;
+}
+
+/* ===== AI CARD ===== */
+
+.ai-card{
+    grid-column:span 2;
+    background:linear-gradient(135deg,#6c63ff,#b388ff);
+    color:white;
+}
+
+.ai-card .card-title,
+.ai-card .card-desc{
+    color:white;
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media(max-width:768px){
+
+.ai-card{
+grid-column:span 1;
+}
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="dashboard">
+
+<!-- HEADER -->
+<div class="header">
+<h2>Learning Progress</h2>
+</div>
+
+<!-- GRID -->
+<div class="grid">
+
+<!-- DAILY STUDY PLAN -->
+<div class="card">
+
+<div class="card-icon">📅</div>
+<div class="card-title">Daily Study Plan</div>
+<div class="card-desc">
+Plan your daily study schedule and track what you complete.
+</div>
+
+<div class="field">
+<input type="text" id="dailySubject" placeholder="Subject">
+</div>
+
+<div class="field">
+<input type="time" id="dailyTime">
+</div>
+
+<button onclick="addDailyPlan()">Add Plan</button>
+<div id="dailyResult"></div>
+
+</div>
+
+<!-- WEEKLY STUDY PLAN -->
+
+<div class="card">
+
+<div class="card-icon">🗓</div>
+<div class="card-title">Weekly Study Plan</div>
+<div class="card-desc">
+Organize subjects and goals for the entire week.
+</div>
+
+<div class="field">
+<select id="weeklyDay">
+<option>Select Day</option>
+<option>Monday</option>
+<option>Tuesday</option>
+<option>Wednesday</option>
+<option>Thursday</option>
+<option>Friday</option>
+<option>Saturday</option>
+<option>Sunday</option>
+</select>
+</div>
+
+<div class="field">
+<input type="text" id="weeklyGoal" placeholder="Study Goal">
+</div>
+
+<button onclick="addWeeklyPlan()">Add Weekly Plan</button>
+<div id="weeklyResult"></div>
+
+</div>
+
+<!-- TIMETABLE GENERATOR -->
+
+<div class="card">
+
+<div class="card-icon">⏰</div>
+<div class="card-title">Time Table Generator</div>
+<div class="card-desc">
+Automatically generate a balanced study timetable.
+</div>
+
+<div class="field">
+<select id="studyHours">
+<option value="">Study Hours Per Day</option>
+<option value="2">2 Hours</option>
+<option value="4">4 Hours</option>
+<option value="6">6 Hours</option>
+<option value="8">8 Hours</option>
+</select>
+</div>
+
+<div class="field">
+<select id="subjectCount">
+<option value="">Subjects Count</option>
+<option value="3">3 Subjects</option>
+<option value="4">4 Subjects</option>
+<option value="5">5 Subjects</option>
+</select>
+</div>
+
+<button onclick="generateTimetable()">Generate Timetable</button>
+<p id="timetableResult"></p>
+
+</div>
+
+<!-- REMINDERS -->
+
+<div class="card">
+
+<div class="card-icon">🔔</div>
+<div class="card-title">Reminders</div>
+<div class="card-desc">
+Set reminders for study sessions, tests and assignments.
+</div>
+
+<div class="field">
+<input type="text" id="reminderTitle" placeholder="Reminder Title">
+</div>
+
+<div class="field">
+<input type="datetime-local" id="reminderTime">
+</div>
+
+<button onclick="setReminder()">Set Reminder</button>
+<p id="reminderResult"></p>
+
+</div>
+
+<!-- AI SUGGESTIONS -->
+
+<div class="card ai-card">
+
+<div class="card-icon">🤖</div>
+<div class="card-title">Smart AI Suggestions</div>
+
+<div class="card-desc">
+AI analyzes your study pattern and suggests better schedules, focus areas and improvements to maximize your learning progress.
+</div>
+
+<button onclick="getAISuggestions()">Get AI Study Suggestions</button>
+<p id="aiResult"></p>
+
+</div>
+
+</div>
+
+</div>
+<script>
+
+function addDailyPlan(){
+
+let subject = document.getElementById("dailySubject").value;
+let time = document.getElementById("dailyTime").value;
+
+let result = document.getElementById("dailyResult");
+
+result.innerHTML += "<p>" + subject + " - " + time + "</p>";
+
+}
+function addWeeklyPlan(){
+
+let day = document.getElementById("weeklyDay").value;
+let goal = document.getElementById("weeklyGoal").value;
+
+let result = document.getElementById("weeklyResult");
+
+result.innerHTML += "<p>" + day + " : " + goal + "</p>";
+
+}
+function generateTimetable() {
+
+let hours = document.getElementById("studyHours").value;
+let subjects = document.getElementById("subjectCount").value;
+
+if(hours === "" || subjects === ""){
+alert("Please select options");
+return;
+}
+
+let result = "";
+
+let hoursPerSubject = hours / subjects;
+
+for(let i=1;i<=subjects;i++){
+result += "Subject " + i + " : " + hoursPerSubject + " Hours <br>";
+}
+
+document.getElementById("timetableResult").innerHTML = result;
+
+}
+let reminders = [];
+
+function setReminder(){
+
+let title = document.getElementById("reminderTitle").value;
+let time = document.getElementById("reminderTime").value;
+
+if(title === "" || time === ""){
+alert("Please enter reminder details");
+return;
+}
+
+reminders.push({
+title: title,
+time: new Date(time)
+});
+
+document.getElementById("reminderResult").innerHTML +=
+"<p>Reminder Set: " + title + "</p>";
+
+}
+setInterval(function(){
+
+let now = new Date();
+
+reminders.forEach(function(reminder,index){
+
+if(now >= reminder.time){
+
+alert("Reminder: " + reminder.title);
+
+reminders.splice(index,1);
+
+}
+
+});
+
+},1000);
+function getAISuggestions(){
+
+let suggestions = [];
+
+// Daily plan analysis
+let dailyPlans = document.querySelectorAll("#dailyResult p");
+
+if(dailyPlans.length >= 2){
+suggestions.push("✅ Good consistency! You are planning multiple subjects daily.");
+}
+else{
+suggestions.push("👉 Try studying at least 2 subjects daily for better consistency.");
+}
+
+// Timetable check
+let timetable = document.getElementById("timetableResult").innerText;
+
+if(timetable === ""){
+suggestions.push("👉 Generate timetable to improve study balance.");
+}
+else{
+suggestions.push("✅ Timetable is helping your structured learning.");
+}
+
+// Study habit suggestion
+suggestions.push("👉 Maintain minimum 4 hours focused study daily.");
+suggestions.push("👉 Revise previous topics before starting new ones.");
+suggestions.push("👉 Take 5-10 minute break after every 50 minutes study.");
+
+document.getElementById("aiResult").innerHTML =
+suggestions.join("<br><br>");
+}
+
+</script>
+
+</body>
+</html>

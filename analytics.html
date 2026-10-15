@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student AI Mentor | Progress & Analytics</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Poppins","Segoe UI",sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:
+        linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)),
+        url("PASTE-YOUR-PROGRESS-BACKGROUND-IMAGE-HERE");
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+    padding:20px;
+    overflow-y:auto;
+}
+
+.dashboard{
+    width:100%;
+    min-height:calc(100vh - 40px);
+    background:rgba(255,255,255,0.40);
+    backdrop-filter:blur(16px);
+    border-radius:28px;
+    box-shadow:0 35px 70px rgba(0,0,0,0.28);
+    padding:30px;
+    display:flex;
+    flex-direction:column;
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:700;
+    color:#333;
+}
+
+.greeting{
+    font-size:16px;
+    color:#444;
+}
+
+.grid{
+    flex:1;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:28px;
+    grid-auto-rows:minmax(220px, auto);
+}
+
+.card{
+    background:rgba(255,255,255,0.70);
+    backdrop-filter:blur(12px);
+    border-radius:24px;
+    padding:28px;
+    box-shadow:0 20px 40px rgba(0,0,0,0.18);
+    transition:all 0.3s ease;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+}
+
+.card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 30px 55px rgba(0,0,0,0.25);
+}
+
+.card-icon{
+    font-size:30px;
+    margin-bottom:12px;
+}
+
+.card-title{
+    font-size:18px;
+    font-weight:600;
+    color:#333;
+    margin-bottom:8px;
+}
+
+.card-desc{
+    font-size:14px;
+    color:#555;
+    line-height:1.5;
+    margin-bottom:14px;
+}
+
+.graph-placeholder{
+    height:80px;
+    background:rgba(108,99,255,0.1);
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:12px;
+    color:#6c63ff;
+}
+
+.tips{
+    background:rgba(108,99,255,0.15);
+    padding:16px;
+    border-radius:16px;
+    font-size:13px;
+    color:#333;
+    flex:1;
+}
+
+@media(max-width:768px){
+    .header{
+        flex-direction:column;
+        gap:10px;
+        align-items:flex-start;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <div class="header">
+        <div class="logo">🎓 Student AI Mentor</div>
+        <div class="greeting">Hi 👋</div>
+    </div>
+
+    <div class="grid">
+
+        <!-- STRENGTH & WEAK AREAS -->
+        <div class="card">
+            <div class="card-icon">💪</div>
+            <div class="card-title">Strength & Weak Areas</div>
+            <div class="card-desc">Highlights subjects or topics where you excel and areas needing improvement.</div>
+            <div class="graph-placeholder" id="strengthWeak">Loading...</div>
+        </div>
+
+        <!-- TIME SPENT -->
+        <div class="card">
+            <div class="card-icon">⏱️</div>
+            <div class="card-title">Time Spent Learning</div>
+            <div class="card-desc">Visual representation of hours studied.</div>
+            <div class="graph-placeholder" id="timeSpent">Loading...</div>
+        </div>
+
+        <!-- ACCURACY -->
+        <div class="card">
+            <div class="card-icon">📈</div>
+            <div class="card-title">Accuracy Graph</div>
+            <div class="card-desc">Shows your learning accuracy.</div>
+            <div class="graph-placeholder" id="accuracy">Loading...</div>
+        </div>
+
+        <!-- TIPS -->
+        <div class="card">
+            <div class="card-icon">📝</div>
+            <div class="card-title">Improvement Tips</div>
+            <div class="card-desc">Based on your performance.</div>
+            <div class="tips" id="tipsBox">Loading...</div>
+        </div>
+
+    </div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBus0l3hUqTgSoTg6fpQNlUmfe77-itPXQ",
+  authDomain: "studentaimentor.firebaseapp.com",
+  projectId: "studentaimentor",
+  storageBucket: "studentaimentor.firebasestorage.app",
+  messagingSenderId: "685642708494",
+  appId: "1:685642708494:web:40169108d8c80a68e9ee5f"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// ✅ GET LOGGED USER
+let user = localStorage.getItem("loggedInUser");
+
+// ✅ LOAD DATA
+async function loadData(){
+
+    const snapshot = await getDocs(collection(db, "performance"));
+
+    let strengths = [];
+    let weaknesses = [];
+    let totalTime = 0;
+    let totalScore = 0;
+    let count = 0;
+
+    snapshot.forEach(doc => {
+        let d = doc.data();
+
+        if(d.username === user){
+
+            totalTime += d.timeSpent || 0;
+            totalScore += d.score || 0;
+            count++;
+
+            if(d.score >= 60){
+                strengths.push(d.subject);
+            } else {
+                weaknesses.push(d.subject);
+            }
+        }
+    });
+
+    if(count === 0){
+        document.getElementById("strengthWeak").innerHTML = "No data available";
+        document.getElementById("timeSpent").innerHTML = "0 minutes";
+        document.getElementById("accuracy").innerHTML = "0%";
+        document.getElementById("tipsBox").innerText = "Start practicing to see analytics.";
+        return;
+    }
+
+    let avg = (totalScore/count).toFixed(1);
+
+    document.getElementById("strengthWeak").innerHTML =
+        "Strengths: " + (strengths.join(", ") || "None") + "<br>" +
+        "Weaknesses: " + (weaknesses.join(", ") || "None");
+
+    document.getElementById("timeSpent").innerHTML =
+        totalTime + " minutes";
+
+    document.getElementById("accuracy").innerHTML =
+        avg + "%";
+
+    let tips = "";
+
+    if(avg < 50){
+        tips = "Focus on basics and revise daily.";
+    } else if(avg < 75){
+        tips = "Good progress. Practice weak areas.";
+    } else {
+        tips = "Excellent performance!";
+    }
+
+    document.getElementById("tipsBox").innerText = tips;
+}
+
+loadData();
+
+</script>
+
+</body>
+</html>

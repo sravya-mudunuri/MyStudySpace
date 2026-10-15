@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Mentor | Tasks & Assignments</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:"Poppins","Segoe UI",sans-serif;
+}
+
+body{
+min-height:100vh;
+padding:20px;
+background:
+linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)),
+url("https://t4.ftcdn.net/jpg/04/97/86/15/360_F_497861573_EX9cjKXjVLBhbHrawjVK8M3BthLDS5lE.jpg");
+background-size:cover;
+background-position:center;
+}
+
+.dashboard{
+width:100%;
+min-height:calc(100vh - 40px);
+background:rgba(255,255,255,0.40);
+backdrop-filter:blur(16px);
+border-radius:28px;
+box-shadow:0 35px 70px rgba(0,0,0,0.28);
+padding:30px;
+display:flex;
+flex-direction:column;
+}
+
+.header{
+margin-bottom:30px;
+}
+
+.header h2{
+font-size:24px;
+color:#333;
+font-weight:600;
+}
+
+.grid{
+flex:1;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:26px;
+}
+
+.card{
+background:rgba(255,255,255,0.70);
+backdrop-filter:blur(12px);
+border-radius:24px;
+padding:30px;
+box-shadow:0 20px 40px rgba(0,0,0,0.18);
+transition:all 0.3s ease;
+display:flex;
+flex-direction:column;
+}
+
+.card:hover{
+transform:translateY(-8px);
+box-shadow:0 30px 55px rgba(0,0,0,0.25);
+}
+
+.card-icon{
+font-size:30px;
+margin-bottom:12px;
+}
+
+.card-title{
+font-size:16px;
+font-weight:600;
+color:#333;
+margin-bottom:8px;
+}
+
+.card-desc{
+font-size:14px;
+color:#555;
+line-height:1.5;
+margin-bottom:18px;
+}
+
+.field{
+margin-bottom:14px;
+}
+
+.field input,
+.field select{
+width:100%;
+padding:10px;
+border:none;
+border-bottom:2px solid #aaa;
+background:transparent;
+font-size:14px;
+}
+
+button{
+padding:11px;
+border:none;
+border-radius:20px;
+background:linear-gradient(135deg,#6c63ff,#b388ff);
+color:white;
+font-size:14px;
+font-weight:600;
+cursor:pointer;
+margin-top:8px;
+}
+
+button:hover{
+opacity:0.9;
+}
+
+.ai-card{
+grid-column:span 2;
+background:linear-gradient(135deg,#6c63ff,#b388ff);
+color:white;
+}
+
+.ai-card .card-title,
+.ai-card .card-desc{
+color:white;
+}
+
+@media(max-width:768px){
+.ai-card{
+grid-column:span 1;
+}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="dashboard">
+
+<div class="header">
+<h2>Tasks & Assignments</h2>
+</div>
+
+<div class="grid">
+
+<!-- MCQS -->
+
+<div class="card">
+
+<div class="card-icon">❓</div>
+<div class="card-title">MCQs</div>
+<div class="card-desc">
+Practice multiple choice questions to strengthen concepts and prepare for exams.
+</div>
+
+<div class="field">
+<select id="subject">
+<option value="">Select Subject</option>
+<option value="math">Mathematics</option>
+<option value="cs">Computer Science</option>
+<option value="physics">Physics</option>
+<option value="english">English</option>
+</select>
+</div>
+
+<div class="field">
+<select id="difficulty">
+<option value="">Difficulty Level</option>
+<option value="easy">Easy</option>
+<option value="medium">Medium</option>
+<option value="hard">Hard</option>
+</select>
+</div>
+
+<button onclick="openMCQ()">Start MCQ Practice</button>
+
+</div>
+
+<!-- SHORT QUESTIONS -->
+
+<div class="card">
+
+<div class="card-icon">✍</div>
+<div class="card-title">Short Questions</div>
+<div class="card-desc">
+Answer short descriptive questions to test your understanding.
+</div>
+
+<div class="field">
+<input type="text" id="topic" placeholder="Enter Topic">
+</div>
+
+<div class="field">
+<select id="shortSubject">
+<option value="">Select Subject</option>
+<option>Maths</option>
+<option>Science</option>
+<option>Computer Science</option>
+<option>English</option>
+</select>
+</div>
+
+<button onclick="searchTopic()">Start Questions</button>
+
+</div>
+
+<!-- MOCK TEST -->
+
+<div class="card">
+
+<div class="card-icon">🧪</div>
+<div class="card-title">Mock Tests</div>
+<div class="card-desc">
+Simulated exam tests to prepare for real exam environments.
+</div>
+
+<div class="field">
+<select id="examType">
+<option value="">Select Exam Type</option>
+<option value="unit">Unit Test</option>
+<option value="mid">Mid Exam</option>
+<option value="final">Final Exam</option>
+</select>
+</div>
+
+<div class="field">
+<select id="duration">
+<option value="">Time Duration</option>
+<option value="30">30 Minutes</option>
+<option value="60">1 Hour</option>
+<option value="120">2 Hours</option>
+</select>
+</div>
+<p id="timer" style="font-size:20px; color:red; font-weight:bold;"></p>
+
+<button onclick="startMockTest()">Start Mock Test</button>
+
+</div>
+
+<!-- PREVIOUS YEAR -->
+
+<div class="card">
+
+<div class="card-icon">📜</div>
+<div class="card-title">Previous Year Questions</div>
+<div class="card-desc">
+Solve previous year exam questions to understand question patterns.
+</div>
+
+<div class="field">
+<select id="course">
+<option value="">Select Course</option>
+<option value="btech">B.Tech</option>
+<option value="ba">BA</option>
+<option value="mba">MBA</option>
+<option value="ma">MA</option>
+<option value="ms">MS</option>
+<option value="degree">Degree</option>
+</select>
+</div>
+
+<div class="field">
+<select id="year">
+<option value="">Select Year</option>
+<option value="2024">2024</option>
+<option value="2023">2023</option>
+<option value="2022">2022</option>
+<option value="2021">2021</option>
+</select>
+</div>
+
+<button onclick="openPYQ()">Start Practice</button>
+
+</div>
+
+<!-- AI FEEDBACK -->
+
+<!-- AI FEEDBACK -->
+
+<div class="card ai-card">
+
+<div class="card-icon">🤖</div>
+<div class="card-title">Instant AI Feedback</div>
+<div class="card-desc">
+AI analyzes your answers and gives instant feedback, corrections, explanations, and suggestions.
+</div>
+
+<div class="field">
+<input type="text" id="aiTopic" placeholder="Enter topic for explanation">
+</div>
+
+<button onclick="getAIFeedback()">Get AI Feedback</button>
+
+</div>
+
+</div>
+</div>
+
+<script>
+
+function openMCQ(){
+
+let subject=document.getElementById("subject").value;
+let difficulty=document.getElementById("difficulty").value;
+
+let links={
+
+math_easy:"https://gn.dronacharya.info/CSE2Dept/Downloads/Questionpapers/3rd_sem/Discrete-Structures/Question_bank_set_theory_07012016.pdf",
+math_medium:"https://gn.dronacharya.info/CSE2Dept/Downloads/Questionpapers/3rd_sem/Discrete-Structures/Question_bank_set_theory_07012016.pdf",
+math_hard:"https://gn.dronacharya.info/CSE2Dept/Downloads/Questionpapers/3rd_sem/Discrete-Structures/Question_bank_set_theory_07012016.pdf",
+
+cs_easy:"https://file-khulna.portal.gov.bd/files/acl.keshabpur.jessore.gov.bd/notices/41bd1c38_28fc_4752_b4db_e5d1f938e9a1/a1aa7bb3e08ad9f33e363d3e7858b0fa.pdf",
+cs_medium:"https://file-khulna.portal.gov.bd/files/acl.keshabpur.jessore.gov.bd/notices/41bd1c38_28fc_4752_b4db_e5d1f938e9a1/a1aa7bb3e08ad9f33e363d3e7858b0fa.pdf",
+cs_hard:"https://file-khulna.portal.gov.bd/files/acl.keshabpur.jessore.gov.bd/notices/41bd1c38_28fc_4752_b4db_e5d1f938e9a1/a1aa7bb3e08ad9f33e363d3e7858b0fa.pdf",
+
+physics_easy:"https://www.scribd.com/document/670028343/Physics-MCQ-Questions-PDF",
+physics_medium:"https://www.scribd.com/document/670028343/Physics-MCQ-Questions-PDF",
+physics_hard:"https://www.scribd.com/document/670028343/Physics-MCQ-Questions-PDF",
+
+english_easy:"https://www.centrolinguebenaco.com/wp-content/uploads/2018/10/test-inglese.pdf",
+english_medium:"https://www.centrolinguebenaco.com/wp-content/uploads/2018/10/test-inglese.pdf",
+english_hard:"https://www.centrolinguebenaco.com/wp-content/uploads/2018/10/test-inglese.pdf"
+
+};
+
+if(subject==="" || difficulty===""){
+alert("Please select subject and difficulty");
+return;
+}
+
+let key=subject+"_"+difficulty;
+
+window.location.href=links[key];
+
+}
+
+function searchTopic(){
+
+let topic=document.getElementById("topic").value;
+let subject=document.getElementById("shortSubject").value;
+
+if(topic==="" || subject===""){
+alert("Please enter topic and subject");
+return;
+}
+
+let query=topic+" "+subject+" explanation";
+
+window.open("https://www.google.com/search?q="+encodeURIComponent(query));
+
+}
+
+function startMockTest(){
+
+let exam=document.getElementById("examType").value;
+let time=document.getElementById("duration").value;
+
+if(exam==="" || time===""){
+alert("Please select exam type and duration");
+return;
+}
+
+let pdf="https://tracktest.eu/wp-content/uploads/2022/12/A2-English-test-with-answers.pdf";
+
+let win=window.open("","_blank");
+
+win.document.write(`
+<html>
+<head>
+<title>Mock Test</title>
+
+<style>
+body{margin:0;font-family:Poppins,sans-serif;}
+.topbar{
+background:#6c63ff;
+color:white;
+padding:10px 20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+button{
+background:white;
+border:none;
+padding:6px 14px;
+border-radius:8px;
+cursor:pointer;
+font-weight:bold;
+}
+iframe{
+width:100%;
+height:92vh;
+border:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+<button onclick="window.close()">⬅ Back</button>
+<div id="timer">Time Remaining</div>
+</div>
+
+<iframe src="${pdf}"></iframe>
+
+<script>
+
+let totalSeconds=${time}*60;
+
+let timer=setInterval(function(){
+
+let minutes=Math.floor(totalSeconds/60);
+let seconds=totalSeconds%60;
+
+if(seconds<10){seconds="0"+seconds;}
+
+document.getElementById("timer").innerHTML=
+"Time Remaining: "+minutes+":"+seconds;
+
+totalSeconds--;
+
+if(totalSeconds<0){
+clearInterval(timer);
+alert("Time Up! Mock test ended.");
+window.close();
+}
+
+},1000);
+
+
+<\/script>
+
+</body>
+</html>
+`);
+
+}
+function openPYQ(){
+
+let course=document.getElementById("course").value;
+let year=document.getElementById("year").value;
+
+if(course==="" || year===""){
+alert("Please select course and year");
+return;
+}
+
+let links={
+
+btech_2024:"https://vardhamancoe-my.sharepoint.com/personal/itsupport_vardhaman_org1/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fitsupport%5Fvardhaman%5Forg1%2FDocuments%2Fexaminations%2Dprevious%20questions%2F2024%2D25%2FBT%5FV%5FSEM%5FREGULAR%5FDEC%5F2024%20%2Epdf&parent=%2Fpersonal%2Fitsupport%5Fvardhaman%5Forg1%2FDocuments%2Fexaminations%2Dprevious%20questions%2F2024%2D25&ga=1",
+btech_2023:"https://vardhamancoe-my.sharepoint.com/personal/itsupport_vardhaman_org1/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fitsupport%5Fvardhaman%5Forg1%2FDocuments%2Fexaminations%2Dprevious%20questions%2F2024%2D25%2FBT%5FV%5FSEM%5FREGULAR%5FDEC%5F2024%20%2Epdf&parent=%2Fpersonal%2Fitsupport%5Fvardhaman%5Forg1%2FDocuments%2Fexaminations%2Dprevious%20questions%2F2024%2D25&ga=1",
+btech_2022:"https://vardhamancoe-my.sharepoint.com/personal/itsupport_vardhaman_org1/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fitsupport%5Fvardhaman%5Forg1%2FDocuments%2Fexaminations%2Dprevious%20questions%2F2024%2D25%2FBT%5FV%5FSEM%5FREGULAR%5FDEC%5F2024%20%2Epdf&parent=%2Fpersonal%2Fitsupport%5Fvardhaman%5Forg1%2FDocuments%2Fexaminations%2Dprevious%20questions%2F2024%2D25&ga=1",
+btech_2021:"https://vardhamancoe-my.sharepoint.com/personal/itsupport_vardhaman_org1/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fitsupport%5Fvardhaman%5Forg1%2FDocuments%2Fexaminations%2Dprevious%20questions%2F2024%2D25%2FBT%5FV%5FSEM%5FREGULAR%5FDEC%5F2024%20%2Epdf&parent=%2Fpersonal%2Fitsupport%5Fvardhaman%5Forg1%2FDocuments%2Fexaminations%2Dprevious%20questions%2F2024%2D25&ga=1",
+
+ba_2024:"https://vardhamancoe-my.sharepoint.com/personal/itsupport_vardhaman_org1/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fitsupport%5Fvardhaman%5Forg1%2FDocuments%2Fexaminations%2Dprevious%20questions%2F2024%2D25%2FBT%5F2%5FR%5FJULY%5F2025%20%2Epdf&parent=%2Fpersonal%2Fitsupport%5Fvardhaman%5Forg1%2FDocuments%2Fexaminations%2Dprevious%20questions%2F2024%2D25&ga=1",
+ba_2023:"https://vardhamancoe-my.sharepoint.com/personal/itsupport_vardhaman_org1/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fitsupport%5Fvardhaman%5Forg1%2FDocuments%2Fexaminations%2Dprevious%20questions%2F2024%2D25%2FBT%5F2%5FR%5FJULY%5F2025%20%2Epdf&parent=%2Fpersonal%2Fitsupport%5Fvardhaman%5Forg1%2FDocuments%2Fexaminations%2Dprevious%20questions%2F2024%2D25&ga=1",
+ba_2022:"https://vardhamancoe-my.sharepoint.com/personal/itsupport_vardhaman_org1/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fitsupport%5Fvardhaman%5Forg1%2FDocuments%2Fexaminations%2Dprevious%20questions%2F2024%2D25%2FBT%5F2%5FR%5FJULY%5F2025%20%2Epdf&parent=%2Fpersonal%2Fitsupport%5Fvardhaman%5Forg1%2FDocuments%2Fexaminations%2Dprevious%20questions%2F2024%2D25&ga=1",
+ba_2021:"https://vardhamancoe-my.sharepoint.com/personal/itsupport_vardhaman_org1/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fitsupport%5Fv

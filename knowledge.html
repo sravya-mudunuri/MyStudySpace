@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knowledge Vault | MyStudySpace</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Poppins","Segoe UI",sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:
+        linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)),
+        url("https://t4.ftcdn.net/jpg/04/97/86/15/360_F_497861573_EX9cjKXjVLBhbHrawjVK8M3BthLDS5lE.jpg");
+    background-size:cover;
+    padding:20px;
+}
+
+.container{
+    display:flex;
+    gap:20px;
+    max-width:1200px;
+    margin:auto;
+}
+
+/* SIDEBAR */
+.sidebar{
+    width:250px;
+    background:rgba(255,255,255,0.4);
+    backdrop-filter:blur(16px);
+    border-radius:20px;
+    padding:20px;
+}
+
+.sidebar h3{
+    margin-bottom:10px;
+}
+
+.sheet{
+    padding:8px;
+    margin-top:8px;
+    background:white;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.active-sheet{
+    background:#6c63ff;
+    color:white;
+}
+
+/* MAIN AREA */
+.main{
+    flex:1;
+    background:rgba(255,255,255,0.4);
+    backdrop-filter:blur(16px);
+    border-radius:20px;
+    padding:20px;
+}
+
+input, textarea, select{
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+    border:none;
+    border-radius:8px;
+}
+
+button{
+    margin-top:10px;
+    padding:10px;
+    background:#6c63ff;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.note{
+    background:white;
+    padding:12px;
+    border-radius:10px;
+    margin-top:12px;
+}
+
+.tag{
+    font-size:12px;
+    background:#ddd;
+    padding:3px 6px;
+    border-radius:6px;
+    margin-left:5px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- SIDEBAR (SHEETS) -->
+<div class="sidebar">
+    <h3>📁 Sheets</h3>
+
+    <input type="text" id="sheetInput" placeholder="New Sheet">
+    <button onclick="addSheet()">Add Sheet</button>
+
+    <div id="sheetList"></div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+    <h2 id="currentSheetName">Select a Sheet</h2>
+
+    <textarea id="noteInput" placeholder="Write your note..."></textarea>
+
+    <input type="text" id="tagInput" placeholder="Subject Tag (DSA, OS...)">
+
+    <button onclick="addNote()">Save Note</button>
+
+    <div id="notes"></div>
+
+</div>
+
+</div>
+
+<script>
+
+let data = JSON.parse(localStorage.getItem("vaultData")) || {};
+let currentSheet = null;
+
+/* SAVE */
+function saveData(){
+    localStorage.setItem("vaultData", JSON.stringify(data));
+}
+
+/* ADD SHEET */
+function addSheet(){
+    let name = document.getElementById("sheetInput").value;
+    if(name === "") return alert("Enter sheet name");
+
+    if(!data[name]) data[name] = [];
+
+    currentSheet = name;
+    document.getElementById("sheetInput").value="";
+    saveData();
+    renderSheets();
+    renderNotes();
+}
+
+/* SWITCH SHEET */
+function selectSheet(name){
+    currentSheet = name;
+    renderSheets();
+    renderNotes();
+}
+
+/* RENDER SHEETS */
+function renderSheets(){
+    let list = document.getElementById("sheetList");
+    list.innerHTML="";
+
+    Object.keys(data).forEach(name=>{
+        let div = document.createElement("div");
+        div.className = "sheet " + (name===currentSheet ? "active-sheet":"");
+        div.innerText = name;
+        div.onclick = ()=>selectSheet(name);
+        list.appendChild(div);
+    });
+
+    document.getElementById("currentSheetName").innerText = currentSheet || "Select a Sheet";
+}
+
+/* ADD NOTE */
+function addNote(){
+    if(!currentSheet) return alert("Select a sheet first");
+
+    let note = document.getElementById("noteInput").value;
+    let tag = document.getElementById("tagInput").value;
+
+    if(note==="") return alert("Write something");
+
+    data[currentSheet].push({
+        text:note,
+        tag:tag
+    });
+
+    saveData();
+    renderNotes();
+
+    noteInput.value="";
+    tagInput.value="";
+}
+
+/* RENDER NOTES */
+function renderNotes(){
+    let container = document.getElementById("notes");
+    container.innerHTML="";
+
+    if(!currentSheet) return;
+
+    data[currentSheet].forEach((n,i)=>{
+        let div = document.createElement("div");
+        div.className="note";
+
+        div.innerHTML = `
+        ${n.text}
+        <div>
+            <span class="tag">${n.tag}</span>
+            <button onclick="deleteNote(${i})">❌</button>
+        </div>
+        `;
+
+        container.appendChild(div);
+    });
+}
+
+/* DELETE */
+function deleteNote(index){
+    data[currentSheet].splice(index,1);
+    saveData();
+    renderNotes();
+}
+
+/* INIT */
+renderSheets();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Mentor | Sign Up</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:"Poppins","Segoe UI",sans-serif;
+}
+
+/* ===== BACKGROUND ===== */
+
+body{
+min-height:100vh;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+background:
+linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)),
+url("https://t4.ftcdn.net/jpg/04/97/86/15/360_F_497861573_EX9cjKXjVLBhbHrawjVK8M3BthLDS5lE.jpg");
+
+background-size:cover;
+background-position:center;
+padding:20px;
+}
+
+/* ===== CENTERED GLASS CONTAINER ===== */
+
+.container{
+width:100%;
+max-width:700px;
+background:rgba(255,255,255,0.40);
+backdrop-filter:blur(16px);
+border-radius:28px;
+box-shadow:0 35px 70px rgba(0,0,0,0.28);
+padding:35px;
+}
+
+/* ===== INNER SIGNUP BOX ===== */
+
+.signup-box{
+background:rgba(255,255,255,0.70);
+backdrop-filter:blur(12px);
+border-radius:24px;
+padding:30px;
+}
+
+/* TITLE */
+
+.signup-box h2{
+text-align:center;
+font-size:26px;
+margin-bottom:25px;
+color:#333;
+}
+
+/* ===== FORM GRID ===== */
+
+.form-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:18px;
+}
+
+/* INPUT FIELDS */
+
+.field{
+position:relative;
+}
+
+.field.full{
+grid-column:1 / 3;
+}
+
+.field input,
+.field select{
+width:100%;
+padding:12px 36px 12px 10px;
+border:none;
+border-bottom:2px solid #aaa;
+background:transparent;
+font-size:14px;
+}
+
+.field input:focus,
+.field select:focus{
+outline:none;
+border-color:#6c63ff;
+}
+
+/* ICONS */
+
+.field span{
+position:absolute;
+right:10px;
+top:50%;
+transform:translateY(-50%);
+font-size:16px;
+opacity:0.6;
+}
+
+/* BUTTON */
+
+button{
+width:100%;
+padding:12px;
+border:none;
+border-radius:22px;
+background:linear-gradient(135deg,#6c63ff,#b388ff);
+color:white;
+font-size:15px;
+font-weight:600;
+cursor:pointer;
+margin-top:15px;
+}
+
+button:hover{
+opacity:0.9;
+}
+
+/* FOOTER */
+
+.login-link{
+text-align:center;
+margin-top:18px;
+font-size:14px;
+color:#444;
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media(max-width:600px){
+.form-grid{
+grid-template-columns:1fr;
+}
+.field.full{
+grid-column:auto;
+}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="signup-box">
+
+<h2>Signup</h2>
+
+<!-- 🔥 FORM FIXED -->
+<form class="form-grid" onsubmit="return false;">
+
+<div class="field">
+<input type="text" id="firstName" placeholder="First Name">
+<span>👤</span>
+</div>
+
+<div class="field">
+<input type="text" id="lastName" placeholder="Last Name">
+<span>👤</span>
+</div>
+
+<div class="field">
+<input type="text" id="username" placeholder="User Name">
+<span>👤</span>
+</div>
+
+<div class="field">
+<input type="tel" id="phone" placeholder="Phone Number">
+<span>📞</span>
+</div>
+
+<div class="field">
+<input type="email" id="email" placeholder="Email">
+<span>✉️</span>
+</div>
+
+<div class="field">
+<input type="password" id="password" placeholder="Password">
+<span>🔒</span>
+</div>
+
+<div class="field">
+<select id="studentType">
+<option value="">Student Type</option>
+<option>School</option>
+<option>College</option>
+<option>Graduate</option>
+<option>Exam Aspirant</option>
+</select>
+</div>
+
+<div class="field">
+<select id="classYear">
+<option value="">Class / Year</option>
+<option>10th</option>
+<option>12th</option>
+<option>1st Year</option>
+<option>Final Year</option>
+</select>
+</div>
+
+<div class="field full">
+<select id="course">
+<option value="">Stream / Course</option>
+<option>MBA</option>
+<option>MA</option>
+<option>BTech</option>
+<option>BA</option>
+<option>MS</option>
+<option>Degree</option>
+</select>
+</div>
+
+</form>
+
+<!-- 🔥 BUTTON CONNECTED -->
+<button onclick="signup()">Sign Up</button>
+
+<div class="login-link">
+Already have an account? <a href="login.html">Login</a>
+</div>
+
+</div>
+
+</div>
+
+<!-- 🔥 SCRIPT ADDED -->
+<script>
+function signup(){
+
+let user = {
+    firstName: document.getElementById("firstName").value,
+    lastName: document.getElementById("lastName").value,
+    username: document.getElementById("username").value,
+    phone: document.getElementById("phone").value,
+    email: document.getElementById("email").value,
+    password: document.getElementById("password").value,
+    studentType: document.getElementById("studentType").value,
+    classYear: document.getElementById("classYear").value,
+    course: document.getElementById("course").value
+};
+
+if(user.username === "" || user.password === ""){
+    alert("Please fill required fields");
+    return;
+}
+
+// store data
+localStorage.setItem("student", JSON.stringify(user));
+
+alert("Signup Successful");
+
+// redirect to login page
+window.location.href = "./login.html";
+
+}
+</script>
+
+</body>
+</html>

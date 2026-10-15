@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Mentor | Subjects</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Poppins","Segoe UI",sans-serif;
+}
+
+/* ===== SAME BACKGROUND STYLE (ONLY IMAGE CAN CHANGE) ===== */
+body{
+    min-height:100vh;
+    background:
+        linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)),
+        url("PASTE-YOUR-SUBJECTS-BACKGROUND-IMAGE-HERE");
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+    padding:20px;
+    overflow-y:auto;
+}
+
+/* ===== MAIN GLASS CONTAINER ===== */
+.dashboard{
+    width:100%;
+    min-height:calc(100vh - 40px);
+    background:rgba(255,255,255,0.40);
+    backdrop-filter:blur(16px);
+    border-radius:28px;
+    box-shadow:0 35px 70px rgba(0,0,0,0.28);
+    padding:30px;
+    display:flex;
+    flex-direction:column;
+}
+
+/* ===== HEADER ===== */
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:700;
+    color:#333;
+}
+
+.greeting{
+    font-size:16px;
+    color:#444;
+}
+
+/* ===== SUBJECT GRID ===== */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:28px;
+}
+
+/* ===== SUBJECT CARDS ===== */
+.card{
+    background:rgba(255,255,255,0.70);
+    backdrop-filter:blur(12px);
+    border-radius:24px;
+    padding:34px;
+    box-shadow:0 20px 40px rgba(0,0,0,0.18);
+    transition:all 0.3s ease;
+    cursor:pointer;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 30px 55px rgba(0,0,0,0.25);
+}
+
+.card-title{
+    font-size:18px;
+    font-weight:600;
+    color:#333;
+    margin-bottom:10px;
+}
+
+.card-desc{
+    font-size:14px;
+    color:#555;
+    line-height:1.6;
+    margin-bottom:14px;
+}
+
+.card-status{
+    font-size:13px;
+    color:#444;
+    font-weight:500;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+    .header{
+        flex-direction:column;
+        gap:10px;
+        align-items:flex-start;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="logo">🎓 Student AI Mentor</div>
+        <div class="greeting">Hi</div>
+    </div>
+
+    <!-- SUBJECTS GRID -->
+    <div class="grid">
+
+        <!-- ===== BTECH SUBJECTS ===== -->
+        <a href="pdfs/Math.pdf" target="_blank">
+         
+        <div class="card">
+            <div class="card-title">Engineering Mathematics</div>
+            <div class="card-desc">Linear algebra, calculus & differential equations</div>
+            <div class="card-status">BTech • In Progress</div>
+        </div>
+        </a>
+        <a href="pdfs/Dsa.pdf" target="_blank">
+        <div class="card">
+            <div class="card-title">Data Structures & Algorithms</div>
+            <div class="card-desc">Arrays, stacks, trees, graphs & problem solving</div>
+            <div class="card-status">BTech • Ongoing</div>
+        </div>
+        </a>
+        <a href="pdfs/OS.pdf" target="_blank">
+        <div class="card">
+            <div class="card-title">Operating Systems</div>
+            <div class="card-desc">Processes, memory management & scheduling</div>
+            <div class="card-status">BTech • Not Started</div>
+        </div>
+        </a>
+        <a href="pdfs/DBMS.pdf" target="_blank">
+        <div class="card">
+            <div class="card-title">Database Management Systems</div>
+            <div class="card-desc">SQL, normalization, transactions & indexing</div>
+            <div class="card-status">BTech • Revising</div>
+        </div>
+        </a>
+        <a href="pdfs/CN.pdf" target="_blank">
+        <div class="card">
+            <div class="card-title">Computer Networks</div>
+            <div class="card-desc">OSI model, TCP/IP, routing & security</div>
+            <div class="card-status">BTech • In Progress</div>
+        </div>
+        </a>
+
+        <!-- ===== DEGREE / BA SUBJECTS ===== -->
+         <a href="pdfs/English.pdf" target="_blank">
+        <div class="card">
+            <div class="card-title">English Literature</div>
+            <div class="card-desc">Poetry, prose, drama & literary analysis</div>
+            <div class="card-status">BA • Completed</div>
+        </div>
+        </a>
+        <a href="pdfs/political.pdf" target="_blank">
+        <div class="card">
+            <div class="card-title">Political Science</div>
+            <div class="card-desc">Indian constitution, governance & politics</div>
+            <div class="card-status">BA • Ongoing</div>
+        </div>
+        </a>
+        <a href="pdfs/Economics.pdf" target="_blank">
+        <div class="card">
+            <div class="card-title">Economics</div>
+            <div class="card-desc">Microeconomics, macroeconomics & policy</div>
+            <div class="card-status">BA • In Progress</div>
+        </div>
+        </a>
+        <a href="pdfs/History.pdf" target="_blank">
+        <div class="card">
+            <div class="card-title">History</div>
+            <div class="card-desc">Ancient, medieval & modern history</div>
+            <div class="card-status">BA • Not Started</div>
+        </div>
+        </a>
+
+        <!-- ===== MBA / MCOM SUBJECTS ===== -->
+         <a href="pdfs/Financial.pdf" target="_blank">
+        <div class="card">
+            <div class="card-title">Financial Management</div>
+            <div class="card-desc">Budgeting, investment & financial analysis</div>
+            <div class="card-status">MBA • In Progress</div>
+        </div>
+        </a>
+        <a href="pdfs/Marketing.pdf" target="_blank">
+        <div class="card">
+            <div class="card-title">Marketing Management</div>
+            <div class="card-desc">Consumer behavior, branding & strategy</div>
+            <div class="card-status">MBA • Ongoing</div>
+        </div>
+        </a>
+        <a href="pdfs/Human.pdf" target="_blank">
+        <div class="card">
+            <div class="card-title">Human Resource Management</div>
+            <div class="card-desc">Recruitment, training & organizational behavior</div>
+            <div class="card-status">MBA • Revising</div>
+        </div>
+        </a>
+        <a href="pdfs/Business.pdf" target="_blank">
+        <div class="card">
+            <div class="card-title">Business Analytics</div>
+            <div class="card-desc">Data-driven decision making & KPIs</div>
+            <div class="card-status">MBA • Not Started</div>
+        </div>
+        </a>
+
+        <!-- ===== MCA / MS SUBJECTS ===== -->
+         <a href="pdfs/java.pdf" target="_blank">
+        <div class="card">
+            <div class="card-title">Advanced Java Programming</div>
+            <div class="card-desc">JSP, Servlets & enterprise applications</div>
+            <div class="card-status">MCA • In Progress</div>
+        </div>
+        </a>
+        <a href="pdfs/AI.pdf" target="_blank">
+        <div class="card">
+            <div class="card-title">Artificial Intelligence</div>
+            <div class="card-desc">Search, reasoning & intelligent agents</div>
+            <div class="card-status">MS • Ongoing</div>
+        </div>
+        </a>
+        <a href="pdfs/ML.pdf" target="_blank">
+        <div class="card">
+            <div class="card-title">Machine Learning</div>
+            <div class="card-desc">Supervised, unsupervised & model evaluation</div>
+            <div class="card-status">MS • In Progress</div>
+        </div>
+        </a>
+        <a href="pdfs/Math.pdf" target="_blank">
+        <div class="card">
+            <div class="card-title">Cloud Computing</div>
+            <div class="card-desc">AWS, virtualization & distributed systems</div>
+            <div class="card-status">MCA • Not Started</div>
+        </div>
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

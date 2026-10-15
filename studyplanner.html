@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Planner | MyStudySpace</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Poppins","Segoe UI",sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:
+        linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)),
+        url("https://t4.ftcdn.net/jpg/04/97/86/15/360_F_497861573_EX9cjKXjVLBhbHrawjVK8M3BthLDS5lE.jpg");
+    background-size:cover;
+    padding:20px;
+}
+
+.container{
+    background:rgba(255,255,255,0.4);
+    backdrop-filter:blur(16px);
+    border-radius:25px;
+    padding:30px;
+    max-width:950px;
+    margin:auto;
+    box-shadow:0 25px 50px rgba(0,0,0,0.2);
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:20px;
+}
+
+.input-area input,
+.input-area select{
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+    border:none;
+    border-radius:8px;
+}
+
+button{
+    margin-top:12px;
+    padding:10px;
+    width:100%;
+    border:none;
+    border-radius:8px;
+    background:#6c63ff;
+    color:white;
+    font-weight:600;
+    cursor:pointer;
+}
+
+.task{
+    background:rgba(255,255,255,0.85);
+    padding:15px;
+    border-radius:12px;
+    margin-top:12px;
+}
+
+.done{
+    text-decoration:line-through;
+    opacity:0.6;
+}
+
+.meta{
+    font-size:12px;
+    margin-top:6px;
+    color:#555;
+}
+
+.tag{
+    font-size:11px;
+    padding:3px 6px;
+    border-radius:6px;
+    margin-left:5px;
+}
+
+.overdue{background:#ffb3b3;}
+.today{background:#ffe599;}
+.upcoming{background:#c9daf8;}
+
+.bar{
+    height:10px;
+    background:#ddd;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.fill{
+    height:100%;
+    width:0%;
+    background:#6c63ff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+    <h2>📅 Study Planner</h2>
+</div>
+
+<div class="input-area">
+    <input type="text" id="taskInput" placeholder="Task">
+    <input type="text" id="subjectInput" placeholder="Subject">
+    
+    <input type="number" id="duration" placeholder="Duration (minutes)">
+    <input type="date" id="date">
+
+    <select id="priority">
+        <option>High</option>
+        <option>Medium</option>
+        <option>Low</option>
+    </select>
+
+    <select id="difficulty">
+        <option>Easy</option>
+        <option>Medium</option>
+        <option>Hard</option>
+    </select>
+
+    <select id="energy">
+        <option>⚡ High</option>
+        <option>🙂 Medium</option>
+        <option>😴 Low</option>
+    </select>
+
+    <button onclick="addTask()">Add Task</button>
+</div>
+
+<div id="taskList"></div>
+
+<div class="progress">
+    <p>Progress</p>
+    <div class="bar">
+        <div class="fill" id="progressBar"></div>
+    </div>
+</div>
+
+</div>
+
+<script>
+
+let tasks = JSON.parse(localStorage.getItem("plannerTasks")) || [];
+
+function saveTasks(){
+    localStorage.setItem("plannerTasks", JSON.stringify(tasks));
+}
+
+function getAutoTag(date){
+    let today = new Date().toISOString().split("T")[0];
+
+    if(date < today) return "overdue";
+    if(date === today) return "today";
+    return "upcoming";
+}
+
+function getScore(priority, difficulty){
+    let p = priority === "High" ? 3 : priority === "Medium" ? 2 : 1;
+    let d = difficulty === "Hard" ? 3 : difficulty === "Medium" ? 2 : 1;
+    return p * d;
+}
+
+function addTask(){
+    let t = {
+        text: taskInput.value,
+        subject: subjectInput.value,
+        duration: duration.value,
+        date: date.value,
+        priority: priority.value,
+        difficulty: difficulty.value,
+        energy: energy.value,
+        status: "Pending",
+        done:false
+    };
+
+    if(t.text === "") return alert("Enter task");
+
+    tasks.push(t);
+    saveTasks();
+    renderTasks();
+
+    document.querySelectorAll("input").forEach(i=>i.value="");
+}
+
+function renderTasks(){
+    let list = document.getElementById("taskList");
+    list.innerHTML="";
+    let completed = 0;
+
+    tasks.forEach((t,i)=>{
+        let tag = getAutoTag(t.date);
+        let score = getScore(t.priority, t.difficulty);
+
+        if(t.done) completed++;
+
+        let div = document.createElement("div");
+        div.className="task";
+
+        div.innerHTML = `
+        <div class="${t.done?'done':''}">
+            <b>${t.text}</b> (${t.subject})
+        </div>
+
+        <div class="meta">
+            ⏱ ${t.duration} min | 📅 ${t.date} | ⚡ ${t.energy}
+        </div>
+
+        <div class="meta">
+            🎯 ${t.priority} | 🧠 ${t.difficulty} | ⭐ Score: ${score}
+            <span class="tag ${tag}">${tag}</span>
+        </div>
+
+        <div style="margin-top:10px;">
+            <button onclick="toggleStatus(${i})">✔</button>
+            <button onclick="deleteTask(${i})">❌</button>
+        </div>
+        `;
+
+        list.appendChild(div);
+    });
+
+    updateProgress(completed);
+}
+
+function toggleStatus(i){
+    tasks[i].done = !tasks[i].done;
+    tasks[i].status = tasks[i].done ? "Completed" : "Pending";
+    saveTasks();
+    renderTasks();
+}
+
+function deleteTask(i){
+    tasks.splice(i,1);
+    saveTasks();
+    renderTasks();
+}
+
+function updateProgress(completed){
+    let percent = tasks.length===0 ? 0 : (completed/tasks.length)*100;
+    progressBar.style.width = percent + "%";
+}
+
+renderTasks();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>My Study Space AI Assistant</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+
+  /* FULL BACKGROUND IMAGE */
+  background: url("https://t4.ftcdn.net/jpg/04/97/86/15/360_F_497861573_EX9cjKXjVLBhbHrawjVK8M3BthLDS5lE.jpg");
+  background-size: cover;
+  background-position: center;
+  height:100vh;
+  overflow:hidden;
+}
+
+/* OVERLAY */
+.overlay{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background: rgba(0,0,0,0.25);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+/* CHAT BOX */
+.chat{
+  width:100%;
+  max-width:700px;
+  height:90vh;
+  display:flex;
+  flex-direction:column;
+  backdrop-filter: blur(8px);
+  background: rgba(255,255,255,0.15);
+  border-radius:15px;
+  overflow:hidden;
+}
+
+/* ✅ TITLE HEADER ADDED */
+.header{
+  text-align:center;
+  padding:15px;
+  font-size:20px;
+  font-weight:bold;
+  color:white;
+  background: rgba(0,0,0,0.3);
+}
+
+/* MESSAGE AREA */
+.box{
+  flex:1;
+  padding:10px;
+  overflow-y:auto;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+/* MESSAGES */
+.msg{
+  padding:10px;
+  border-radius:10px;
+  max-width:75%;
+  font-size:14px;
+}
+
+/* USER */
+.user{
+  background:#ffffff;
+  color:black;
+  align-self:flex-end;
+}
+
+/* AI */
+.ai{
+  background:#f1f1f1;
+  color:black;
+  align-self:flex-start;
+}
+
+/* INPUT AREA */
+.input-box{
+  display:flex;
+  padding:10px;
+  gap:10px;
+  background: rgba(255,255,255,0.2);
+}
+
+input{
+  flex:1;
+  padding:10px;
+  border:none;
+  border-radius:20px;
+  outline:none;
+}
+
+button{
+  padding:10px 15px;
+  border:none;
+  border-radius:20px;
+  background:#000;
+  color:white;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="overlay">
+
+<div class="chat">
+
+  <!-- ✅ TITLE ADDED HERE -->
+  <div class="header">My Study Space AI Assistant 🤖</div>
+
+  <div class="box" id="box"></div>
+
+  <div class="input-box">
+    <input id="input" placeholder="Ask Gemini...">
+    <button onclick="send()">Send</button>
+  </div>
+
+</div>
+
+</div>
+
+<script>
+
+const box = document.getElementById("box");
+const input = document.getElementById("input");
+
+function add(text,type){
+  const div = document.createElement("div");
+  div.className = "msg " + type;
+  div.innerHTML = text;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+}
+
+// Calls YOUR server (server.js). The API key stays safely on the server.
+async function askGemini(message){
+  try{
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message })
+    });
+    const data = await res.json();
+    return data.reply || "No response";
+  }catch(e){
+    return "Cannot reach the server. Run <b>npm start</b> and open http://localhost:3000/ai-report.html";
+  }
+}
+
+async function send(){
+
+  const msg = input.value.trim();
+  if(!msg) return;
+
+  add(msg.replace(/</g,"&lt;"),"user");
+  input.value="";
+
+  add("Thinking...","ai");
+
+  const reply = await askGemini(msg);
+
+  box.lastChild.innerHTML = reply;
+}
+
+
+// If opened from the dashboard with ?topic=..., ask it automatically
+const topic = new URLSearchParams(location.search).get("topic");
+if(topic){
+  input.value = "Explain " + topic + " in simple words for a student, with an example and a short study plan.";
+  send();
+}
+
+</script>
+
+</body>
+</html>

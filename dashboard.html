@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Mentor | Dashboard</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Poppins","Segoe UI",sans-serif;
+}
+
+/* ===== SAME BACKGROUND AS LOGIN/SIGNUP ===== */
+body{
+    min-height:100vh;
+    background:
+        linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)),
+        url("https://t4.ftcdn.net/jpg/04/97/86/15/360_F_497861573_EX9cjKXjVLBhbHrawjVK8M3BthLDS5lE.jpg");
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+    padding:20px;
+}
+
+/* ===== DASHBOARD WRAPPER (FULL PAGE) ===== */
+.dashboard{
+    width:100%;
+    min-height:calc(100vh - 40px);
+    margin:auto;
+    background:rgba(255,255,255,0.40);
+    backdrop-filter:blur(16px);
+    border-radius:28px;
+    box-shadow:0 35px 70px rgba(0,0,0,0.28);
+    padding:30px;
+    display:flex;
+    flex-direction:column;
+}
+
+/* ===== HEADER ===== */
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:700;
+    color:#333;
+}
+
+.greeting{
+    font-size:16px;
+    color:#444;
+}
+
+/* ===== GRID LAYOUT (BIG & EQUAL CARDS) ===== */
+.grid{
+    flex:1;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:26px;
+    grid-auto-rows:1fr;
+}
+
+/* ===== GLASS CARDS (EQUAL SIZE) ===== */
+.card{
+    background:rgba(255,255,255,0.70);
+    backdrop-filter:blur(12px);
+    border-radius:24px;
+    padding:32px;
+    box-shadow:0 20px 40px rgba(0,0,0,0.18);
+    transition:all 0.3s ease;
+    cursor:pointer;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 30px 55px rgba(0,0,0,0.25);
+}
+
+.card-icon{
+    font-size:30px;
+    margin-bottom:14px;
+}
+
+.card-title{
+    font-size:16px;
+    font-weight:600;
+    color:#333;
+    margin-bottom:8px;
+}
+
+.card-desc{
+    font-size:14px;
+    color:#555;
+    line-height:1.5;
+}
+
+/* ===== AI MENTOR FEATURE CARD ===== */
+.ai-card{
+    grid-column:span 2;
+    background:linear-gradient(135deg,#6c63ff,#b388ff);
+    color:white;
+}
+
+.ai-card .card-title,
+.ai-card .card-desc{
+    color:white;
+}
+
+.ai-card:hover{
+    opacity:0.95;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+    .header{
+        flex-direction:column;
+        gap:10px;
+        align-items:flex-start;
+    }
+
+    .ai-card{
+        grid-column:span 1;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="logo">🎓 Student AI Mentor</div>
+        <div class="greeting">Hi 👋</div>
+    </div>
+
+    <!-- DASHBOARD GRID -->
+    <div class="grid">
+        <a href="learning.html">
+
+        <div class="card">
+            <div class="card-icon">📊</div>
+            <div class="card-title">Learning Progress</div>
+            <div class="card-desc">Track daily study goals & consistency</div>
+        </div>
+        </a>
+
+        <a href="courses.html">
+        <div class="card">
+            <div class="card-icon">📚</div>
+            <div class="card-title">Courses</div>
+            <div class="card-desc">Manage enrolled subjects & syllabus</div>
+        </div>
+        </a>
+
+        <a href="tasks.html">
+        <div class="card">
+            <div class="card-icon">📝</div>
+            <div class="card-title">Tasks & Assignments</div>
+            <div class="card-desc">Pending tasks & deadlines</div>
+        </div>
+        </a>
+
+        <a href="analytics.html">
+        <div class="card">
+            <div class="card-icon">📈</div>
+            <div class="card-title">Progress Analytics</div>
+            <div class="card-desc">AI insights on strengths & weaknesses</div>
+        </div>
+        </a>
+
+        <!-- ASK AI MENTOR -->
+
+        <div class="card ai-card">
+            <div class="card-icon">🤖</div>
+            <div class="card-title">Ask AI Mentor</div>
+
+            <div class="card-desc">
+                Get instant help, explanations, study plans & motivation
+            </div>
+
+            <input type="text" id="aiTopic"
+            placeholder="Enter topic"
+            style="margin-top:12px;padding:8px;border:none;border-radius:6px;">
+
+            <button onclick="searchAI()"
+            style="margin-top:10px;padding:8px;border:none;border-radius:6px;background:white;color:#6c63ff;font-weight:600;cursor:pointer;">
+            Search
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function searchAI()
+{
+  let topic = document.getElementById("aiTopic").value;
+
+  if(topic === ""){
+    alert("Please enter a topic");
+    return;
+  }
+
+  window.location.href = "ai-report.html?topic=" + encodeURIComponent(topic);
+
+}
+
+</script>
+
+</body>
+</html>

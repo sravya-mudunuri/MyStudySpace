@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Mentor | Login</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:"Poppins","Segoe UI",sans-serif;
+}
+
+body{
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:
+linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)),
+url("https://t4.ftcdn.net/jpg/04/97/86/15/360_F_497861573_EX9cjKXjVLBhbHrawjVK8M3BthLDS5lE.jpg");
+background-size:cover;
+background-position:center;
+padding:20px;
+}
+
+.container{
+width:100%;
+max-width:500px;
+background:rgba(255,255,255,0.40);
+backdrop-filter:blur(16px);
+border-radius:28px;
+box-shadow:0 35px 70px rgba(0,0,0,0.28);
+padding:35px;
+}
+
+.login-box{
+background:rgba(255,255,255,0.70);
+backdrop-filter:blur(12px);
+border-radius:24px;
+padding:30px;
+}
+
+.login-box h2{
+text-align:center;
+font-size:26px;
+margin-bottom:25px;
+color:#333;
+}
+
+.field{
+position:relative;
+margin-bottom:20px;
+}
+
+.field input{
+width:100%;
+padding:12px 36px 12px 10px;
+border:none;
+border-bottom:2px solid #aaa;
+background:transparent;
+font-size:14px;
+}
+
+.field input:focus{
+outline:none;
+border-color:#6c63ff;
+}
+
+.field span{
+position:absolute;
+right:10px;
+top:50%;
+transform:translateY(-50%);
+font-size:16px;
+opacity:0.6;
+}
+
+button{
+width:100%;
+padding:12px;
+border:none;
+border-radius:22px;
+background:linear-gradient(135deg,#6c63ff,#b388ff);
+color:white;
+font-size:15px;
+font-weight:600;
+cursor:pointer;
+margin-top:10px;
+}
+
+button:hover{
+opacity:0.9;
+}
+
+.login-link{
+text-align:center;
+margin-top:18px;
+font-size:14px;
+color:#444;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="login-box">
+
+<h2>Login</h2>
+
+<div class="field">
+<input type="text" id="loginUser" placeholder="User Name">
+<span>👤</span>
+</div>
+
+<div class="field">
+<input type="password" id="loginPass" placeholder="Password">
+<span>🔒</span>
+</div>
+
+<button onclick="login()">Login</button>
+
+<div class="login-link">
+Don't have an account? <a href="signup.html">Sign Up</a>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function login(){
+
+let username = document.getElementById("loginUser").value.trim();
+let password = document.getElementById("loginPass").value.trim();
+
+// validation
+if(username === "" || password === ""){
+    alert("Please enter username and password");
+    return;
+}
+
+// get stored data
+let storedUser = JSON.parse(localStorage.getItem("student"));
+
+if(!storedUser){
+    alert("No account found. Please signup first.");
+    return;
+}
+
+// check credentials
+if(username === storedUser.username && password === storedUser.password){
+
+    // store session
+    localStorage.setItem("loggedInUser", username);
+
+    // redirect (IMPORTANT FIX)
+    window.location.href = "./dashboard.html";
+
+}else{
+    alert("Invalid Username or Password");
+}
+
+}
+
+</script>
+
+</body>
+</html>
